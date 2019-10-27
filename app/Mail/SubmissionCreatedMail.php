@@ -11,16 +11,16 @@ class SubmissionCreatedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $submission;
+    public $form;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($submission)
+    public function __construct($form)
     {
-        $this->submission = $submission;
+        $this->form = $form;
     }
 
     /**

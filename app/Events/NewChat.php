@@ -31,7 +31,7 @@ class NewChat implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chats.' . $this->chat->to);
+        return new PresenceChannel('chats.' . $this->chat->to);
     }
     public function broadcastWith()
     {

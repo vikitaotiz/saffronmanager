@@ -11,7 +11,7 @@
 <body class="hold-transition skin-blue sidebar-mini">
 
 <div id="wrapper">
-
+<div id="app">
 @include('partials.topbar')
 @include('partials.sidebar')
 
@@ -25,7 +25,7 @@
                 </h3>
             @endif
 
-            <div class="row" id="app">
+            <div class="row">
                 <div class="col-md-12">
 
                     @if (Session::has('message'))

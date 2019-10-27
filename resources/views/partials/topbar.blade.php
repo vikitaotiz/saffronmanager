@@ -22,8 +22,6 @@
             <a class="navbar-brand" href="#">Project Manager <small><code> version 0.0.1</code></small></a>
           </div> --}}
 
-
-
         <ul class="nav navbar-nav ml-auto pull-right">
           <!-- <li class="dropdown">
             <a href="#" class="nav-link">
@@ -58,6 +56,11 @@
               <!-- <li><a href="#">CSS</a></li>
               <li><a href="#">JavaScript</a></li> -->
             </ul>
+          </li>
+          <li class="dropdown user user-menu" id="message_alert">
+              <a href="{{action('ContactsController@chats')}}">        
+                <message-alert :user="{{auth()->user()}}"></message-alert>
+              </a>
           </li>
           {{-- <ul class="nav navbar-nav dropdown-menu">
                                       <!-- User image -->

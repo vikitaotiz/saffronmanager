@@ -70,7 +70,6 @@ class UsersController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' =>  Hash::make($request->password),
-            // 'department_id' => json_encode($request->department_id),
             'role_id' => $request->role_id
         ]);
 

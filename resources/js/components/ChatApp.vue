@@ -25,10 +25,9 @@
             };
         },
         mounted() {
-            Echo.private(`chats.${this.user.id}`)
+            Echo.join(`chats.${this.user.id}`)
                 .listen('NewChat', (e) => {
                     this.hanleIncoming(e.chat);
-                    toastr.success('New message has been sent');
                 });
 
             axios.get('./contacts')

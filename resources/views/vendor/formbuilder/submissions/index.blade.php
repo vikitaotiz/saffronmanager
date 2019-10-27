@@ -26,7 +26,7 @@
         <div class="panel-body">
 
                 @if(auth()->user()->role_id == 1)
-                @if($submissions->count())
+                    @if($submissions->count())
 
                         <div class="table-responsive">
                             <table class="table-bordered" id="housekeeps_table">
@@ -89,58 +89,60 @@
                         @endif
 
                 @else
-                    @if(App\Department::findOrfail($department_id)->name == 'Front Desk')
 
-                    <div class="table-responsive">
-                        <table class="table-bordered" id="housekeeps_table">
-                            <thead>
-                                <tr>
-                                    {{-- <th class="five">#</th> --}}
-                                    <th class="fifteen">User Name</th>
-                                    <th class="fifteen">Time</th>
-                                    @foreach($form_headers as $header)
-                                        <th>{{ $header['label'] ?? title_case($header['name']) }}</th>
-                                    @endforeach
-                                    <th class="fifteen">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($user_submissions as $submission)
-                                        <tr>
-                                            {{-- <td>{{ $loop->iteration }}</td> --}}
-                                            <td>{{ $submission->user->name ?? 'n/a' }}</td>
-                                            <td>{{ $submission->created_at->toDayDateTimeString() }}</td>
+                    @foreach ($departments as $department)
+                        @if(App\Department::findOrfail($department)->name == 'Front Desk')
 
-                                            @foreach($form_headers as $header)
+                        <div class="table-responsive">
+                            <table class="table-bordered" id="housekeeps_table">
+                                <thead>
+                                    <tr>
+                                        {{-- <th class="five">#</th> --}}
+                                        <th class="fifteen">User Name</th>
+                                        <th class="fifteen">Time</th>
+                                        @foreach($form_headers as $header)
+                                            <th>{{ $header['label'] ?? title_case($header['name']) }}</th>
+                                        @endforeach
+                                        <th class="fifteen">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($user_submissions as $submission)
+                                            <tr>
+                                                {{-- <td>{{ $loop->iteration }}</td> --}}
+                                                <td>{{ $submission->user->name ?? 'n/a' }}</td>
+                                                <td>{{ $submission->created_at->toDayDateTimeString() }}</td>
+    
+                                                @foreach($form_headers as $header)
+                                                    <td>
+                                                        {{
+                                                            $submission->renderEntryContent(
+                                                                $header['name'], $header['type'], true
+                                                            )
+                                                        }}
+                                                    </td>
+                                                @endforeach
                                                 <td>
-                                                    {{
-                                                        $submission->renderEntryContent(
-                                                            $header['name'], $header['type'], true
-                                                        )
-                                                    }}
+                                                    <a href="{{ route('formbuilder::forms.submissions.show', [$form, $submission->id]) }}" class="btn btn-primary btn-sm" title="View submission">
+                                                        <i class="fa fa-eye"></i> View
+                                                    </a>
+                                                    @can('user_management_access')
+                                                    <form action="{{ route('formbuilder::forms.submissions.destroy', [$form, $submission]) }}" method="POST" id="deleteSubmissionForm_{{ $submission->id }}" class="d-inline-block">
+                                                        @csrf
+                                                        @method('DELETE')
+    
+                                                        <button type="submit" class="btn btn-danger btn-sm confirm-form" data-form="deleteSubmissionForm_{{ $submission->id }}" data-message="Delete this submission?" title="Delete submission">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </button>
+                                                    </form>@endcan
                                                 </td>
-                                            @endforeach
-                                            <td>
-                                                <a href="{{ route('formbuilder::forms.submissions.show', [$form, $submission->id]) }}" class="btn btn-primary btn-sm" title="View submission">
-                                                    <i class="fa fa-eye"></i> View
-                                                </a>
-                                                @can('user_management_access')
-                                                <form action="{{ route('formbuilder::forms.submissions.destroy', [$form, $submission]) }}" method="POST" id="deleteSubmissionForm_{{ $submission->id }}" class="d-inline-block">
-                                                    @csrf
-                                                    @method('DELETE')
+                                            </tr>
+                                        @endforeach
+                                </tbody>
+                              </table>
+                            </div>
 
-                                                    <button type="submit" class="btn btn-danger btn-sm confirm-form" data-form="deleteSubmissionForm_{{ $submission->id }}" data-message="Delete this submission?" title="Delete submission">
-                                                        <i class="fa fa-trash-o"></i>
-                                                    </button>
-                                                </form>@endcan
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                            </tbody>
-                          </table>
-                        </div>
-
-                    @elseif(App\Department::findOrfail($department_id)->name == 'Housekeeping')
+                        @elseif(App\Department::findOrfail($department)->name == 'Housekeeping')
                         <div class="table-responsive">
                             <table class="table-bordered" id="housekeeps_table">
                                 <thead>
@@ -193,8 +195,8 @@
                                 </tbody>
                             </table>
                         </div>
-                    @else
-                        @if(App\User::find(auth()->user()->id)->submissions->count() > 0)
+                        @else
+                            @if(App\User::find(auth()->user()->id)->submissions->count() > 0)
                             <div class="table-responsive">
                                 <table class="table table-bordered d-table table-striped pb-0 mb-0">
                                     <thead>
@@ -214,7 +216,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $submission->user->name ?? 'n/a' }}</td>
                                                 <td>{{ $submission->created_at->toDayDateTimeString() }}</td>
-
+        
                                                 @foreach($form_headers as $header)
                                                     <td>
                                                         {{
@@ -232,7 +234,7 @@
                                                     <form action="{{ route('formbuilder::forms.submissions.destroy', [$form, $submission]) }}" method="POST" id="deleteSubmissionForm_{{ $submission->id }}" class="d-inline-block">
                                                         @csrf
                                                         @method('DELETE')
-
+        
                                                         <button type="submit" class="btn btn-danger btn-sm confirm-form" data-form="deleteSubmissionForm_{{ $submission->id }}" data-message="Delete this submission?" title="Delete submission">
                                                             <i class="fa fa-trash-o"></i>
                                                         </button>
@@ -243,29 +245,19 @@
                                     </tbody>
                                 </table>
                             </div>
-                        @else
-                            <div class="card-body">
-                                <h4 class="text-danger text-center">
-                                    No submission to display.
-                                </h4>
-                            </div>
+                            @else
+                                <div class="card-body">
+                                    <h4 class="text-danger text-center">
+                                        No submission to display.
+                                    </h4>
+                                </div>
+                            @endif
                         @endif
-                    @endif
+                    @endforeach
+                    
                 @endif
 
 
     </div>
 </div>
 @endsection
-
-
-<!-- <script>
-$(document).ready(function() {
-  $('#housekeeps_table').DataTable( {
-      dom: 'Bfrtip',
-      buttons: [
-          'print'
-      ]
-  } );
-} );
-</script> -->

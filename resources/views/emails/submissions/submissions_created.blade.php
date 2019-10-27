@@ -1,56 +1,38 @@
 <style>
-        #customers {
-          font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    table {
+          font-family: arial, sans-serif;
           border-collapse: collapse;
           width: 100%;
-        }
+    }
         
-        #customers td, #customers th {
-          border: 1px solid #ddd;
-          padding: 8px;
-        }
-        
-        #customers tr:nth-child(even){background-color: #f2f2f2;}
-        
-        #customers tr:hover {background-color: #ddd;}
-        
-        #customers th {
-          padding-top: 12px;
-          padding-bottom: 12px;
+    td, th {
+          border: 1px solid #dddddd;
           text-align: left;
-          background-color: #3C8DBC;
-          color: white;
-        }
+          padding: 8px;
+    }
 </style>
 
 @component('mail::message')
 # Form Submission
-
-
-<table id="customers">
-    <tbody>
-        <tr>
-            <th>Form Name</th>
-            <th>Form Submitted By</th>
-            <th>Form Submitted On</th>
-        </tr>
-    </tbody>
+<hr>
+<table>
     <thead>
         <tr>
-            <td>
-                {{\jazmy\FormBuilder\Models\Form::find($submission->form_id)->name}}
-            </td>
-            <td>
-                {{\App\User::find($submission->form_id)->name}}
-            </td>
-            <td>{{$submission->created_at->format('g:i a D, jS, M, Y')}}</td>
+            <th>Submitted By</th>
+            <th>Form Name</th>
+            <th>Submitted On</th>
         </tr>
     </thead>
+    <tbody>
+        <tr>
+            <td>{{\App\User::find($form->user_id)->name}}</td>
+            <td>{{$form->name}}</td>
+            <td>{{now()->format('D, M, Y')}}</td>
+        </tr>
+    </tbody>
 </table>
-
+<hr>
 
 Thanks,<br>
 {{ config('app.name') }}
 @endcomponent
-
-
