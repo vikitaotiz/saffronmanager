@@ -1,0 +1,3 @@
+[submodule "vendor/jazmy/jaz-form-builder"]
+    path = vendor/jazmy/jaz-form-builder
+    url = github.com/jazmy/laravel-formbuilder.git
